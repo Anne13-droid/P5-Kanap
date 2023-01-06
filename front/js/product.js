@@ -38,31 +38,68 @@ try {
   console.log(err);
 }
 
-// récupération du bouton
-let ajout = document.querySelector("#addToCart");
+//  Selection du choix
+const quantite = document.querySelector("#quantity");
+const idcolor = document.querySelector("#color");
+const choixClient = quantite + idcolor;
+
+//  Selection bouton
+const envoyerPanier = document.querySelector("#addToCart");
+
 // écouter au click "ajouter au panier"
-ajout.addEventListener("click", () => {
-  console.log(ajout);
+envoyerPanier.addEventListener("click", (event) => {
+  event.preventDefault();
+  // récupérer les propirétés de l'article en objet et mettre les objets dans un tableau
+  let panier = {
+    id: `${addr}`,
+    quantités: 0,
+    couleur: `${colors}`,
+  };
+
+  let tab = [panier];
+
+  console.log(tab);
+
+  let produitEnregistre = JSON.parse(localStorage.getItem("panierLinea"));
+
+  if (produitEnregistre) {
+  } else {
+    produitEnregistre = [];
+    produitEnregistre.push(panier);
+
+    console.log(produitEnregistre);
+  }
 });
-// récupérer les propirétés de l'article en objet et mettre les objets dans un tableau
-let panier = {
-  id: `${addr}`,
-  quantités: 0,
-  couleur: `${colors}`,
-};
+/*
+
+
 
 let tab = [panier];
-
-let panierLinea = JSON.stringify(tab);
 console.log(panier);
 console.log(tab);
+let panierLinea = JSON.stringify(tab);
+console.log(panierLinea);
 
 // mettre le tableau dans le local storage
 localStorage.setItem("obj", panierLinea);
 panierLinea = localStorage.getItem("obj");
 tab = JSON.parse(panierLinea);
 
+
 // au click, récuperer les tableau dans le local storage et le pusher
 for (let i = 0; i < localStorage.length; i++) {
   localStorage.key(i);
 }
+
+// ------------------------------------------------------------------------------------------------
+
+let produitEnregistre = JSON.parse(localStorage.getItem("panierLinea"));
+
+console.log(produitEnregistre);
+
+if (produitEnregistre) {
+} else {
+  produitEnregistre = [];
+  produitEnregistre.push(panier);
+  console.log(produitEnregistre);
+}*/
