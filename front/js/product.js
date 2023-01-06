@@ -44,15 +44,25 @@ let ajout = document.querySelector("#addToCart");
 ajout.addEventListener("click", () => {
   console.log(ajout);
 });
-// récupérer les propirétés de l'article en objet
-let propriétés = {
+// récupérer les propirétés de l'article en objet et mettre les objets dans un tableau
+let panier = {
   id: `${addr}`,
   quantités: 0,
   couleur: `${colors}`,
 };
-console.log(propriétés);
-// mettre les objets dans un tableau
-let tab = [propriétés, {}, {}];
+
+let tab = [panier];
+
+let panierLinea = JSON.stringify(tab);
+console.log(panier);
+console.log(tab);
+
 // mettre le tableau dans le local storage
+localStorage.setItem("obj", panierLinea);
+panierLinea = localStorage.getItem("obj");
+tab = JSON.parse(panierLinea);
 
 // au click, récuperer les tableau dans le local storage et le pusher
+for (let i = 0; i < localStorage.length; i++) {
+  localStorage.key(i);
+}
