@@ -21,7 +21,7 @@ try {
       document.querySelector("#description").innerHTML = article.description;
 
       document.querySelector("option").value = "default";
-
+      document.title = article.name;
       // récupération des couleurs des produits avec une boucle afin d'afficher toute les couleurs
       for (let couleur of article.colors) {
         // création d'une constante color et récupération de la balise html <option> dans laquelle on injecte la couleur
