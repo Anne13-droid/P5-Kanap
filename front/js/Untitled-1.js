@@ -17,6 +17,6 @@ document.querySelector(".item__img").appendChild(image);
 // quantité
 // prix
 //
-//
-//
+//modifier la quantité: écouter le changement
+//faire le changement dans le dom et dans le localStorage
 //

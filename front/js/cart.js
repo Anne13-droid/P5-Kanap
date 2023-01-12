@@ -10,19 +10,23 @@ const addr2 = fetch("http://127.0.0.1:3000/api/products")
       alert("votre panier est vide");
     } else {
       // afficher les produits dans le HTML
-      let structurePanier = [];
+      let structurePanier = ``;
 
       for (i = 0; i < basketCustomer.length; i++) {
+        const productFound = data.find(
+          (product) => product._id === basketCustomer[i].id
+        );
+        console.log(typeof basketCustomer[i].quantity);
         structurePanier += `
-    <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
+        <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
     <div class="cart__item__img">
-      <img src="${data[i].imageUrl}" alt="${data[i].altTxt}">
+      <img src="${productFound.imageUrl}" alt="${productFound.altTxt}">
     </div>
     <div class="cart__item__content">
       <div class="cart__item__content__description">
-        <h2>${data[i].name}</h2>
+        <h2>${productFound.name}</h2>
         <p>${basketCustomer[i].idColor}</p>
-        <p>${data[i].price} €</p>
+        <p>${productFound.price} €</p>
       </div>
       <div class="cart__item__content__settings">
         <div class="cart__item__content__settings__quantity">
@@ -37,16 +41,26 @@ const addr2 = fetch("http://127.0.0.1:3000/api/products")
   </article>
     `;
       }
+
       document
         .querySelector("#cart__items")
         .insertAdjacentHTML("beforeend", structurePanier);
-      console.log(basketCustomer);
     }
   });
 
-// modifier la quantité et l'enregistrer dans le localstorage
+//  modifier la quantité et l'enregistrer dans le localstorage
 
-const itemQuantity = document.querySelector("itemQuantity");
+const itemQuantity = document.querySelector(".itemQuantity");
 
-addEventListener("change", (event) => {});
+addEventListener("change", (event) => {
+  if (itemQuantity === itemQuantity.value) {
+  } else {
+    itemQuantity.value++;
+  }
+});
+
 console.log(itemQuantity);
+
+// supprimer un article
+// const deletItem = document.querySelectorAll(".deletItem");
+// console.log(deletItem);

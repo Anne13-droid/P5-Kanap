@@ -44,21 +44,32 @@ const addToCart = document.querySelector("#addToCart");
 addToCart.addEventListener("click", () => {
   // sélectionner les valeur des quantités et couleurs
   const quantity = document.querySelector("#quantity").value;
-  const idcolor = colors.value;
+  const color = colors.value;
+  const nbEntier = parseInt(quantity);
+
   // condition des valeurs au click à la selection du client
-  if (idcolor !== "default" && quantity >= 1 && quantity <= 100) {
+  if (color !== "default" && nbEntier >= 1 && nbEntier <= 100) {
+    let panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+    nbEntier.addEventListener("change", () => {
+      if ((addr.id, color !== null)) {
+        for (k = 0; k < addr.id, color; k++) {
+          localStorage.quantity++;
+        }
+      }
+    });
+
     // récupérer les propriétés de l'article en objet
-    let panier = {
+    let product = {
       id: addr,
-      quantity: quantity,
-      idColor: idcolor,
+      quantity: nbEntier,
+      color: color,
     };
     // récupère le panier dans le localstorage
-    let produitEnregistre = JSON.parse(localStorage.getItem("panier")) || [];
-    produitEnregistre.push(panier);
+
+    panier.push(product);
     // permet de rajouter les valeurs sélectionnées dans le localst
-    localStorage.setItem("panier", JSON.stringify(produitEnregistre));
-    console.log(produitEnregistre);
+    localStorage.setItem("panier", JSON.stringify(panier));
   } else {
     alert("Veuillez sélectionnez une couleur et une quantité valide");
   }
