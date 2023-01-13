@@ -46,28 +46,25 @@ addToCart.addEventListener("click", () => {
   const quantity = document.querySelector("#quantity").value;
   const color = colors.value;
   const nbEntier = parseInt(quantity);
-
+  const id = addr._id;
   // condition des valeurs au click à la selection du client
   if (color !== "default" && nbEntier >= 1 && nbEntier <= 100) {
     let panier = JSON.parse(localStorage.getItem("panier")) || [];
-
-    nbEntier.addEventListener("change", () => {
-      if ((addr.id, color !== null)) {
-        for (k = 0; k < addr.id, color; k++) {
-          localStorage.quantity++;
-        }
-      }
-    });
-
     // récupérer les propriétés de l'article en objet
     let product = {
       id: addr,
-      quantity: nbEntier,
       color: color,
+      quantity: nbEntier,
     };
-    // récupère le panier dans le localstorage
+    let cartFound = panier.find(
+      (p) => p.id == product.id && p.color == product.color
+    );
+    if (cartFound != undefined) {
+      cartFound.quantity++;
+    }
 
-    panier.push(product);
+    // récupère le panier dans le localstorage
+    else panier.push(product);
     // permet de rajouter les valeurs sélectionnées dans le localst
     localStorage.setItem("panier", JSON.stringify(panier));
   } else {
