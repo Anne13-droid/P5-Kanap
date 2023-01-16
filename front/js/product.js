@@ -49,14 +49,15 @@ addToCart.addEventListener("click", () => {
   const id = addr._id;
   // condition des valeurs au click à la selection du client
   if (color !== "default" && nbEntier >= 1 && nbEntier <= 100) {
-    let panier = JSON.parse(localStorage.getItem("panier")) || [];
+    let basket = JSON.parse(localStorage.getItem("basket")) || [];
     // récupérer les propriétés de l'article en objet
     let product = {
       id: addr,
       color: color,
       quantity: nbEntier,
     };
-    let cartFound = panier.find(
+    // rajouter un article mm id mm couleur dans le localstorage sur une meme ligne
+    let cartFound = basket.find(
       (p) => p.id == product.id && p.color == product.color
     );
     if (cartFound != undefined) {
@@ -64,9 +65,9 @@ addToCart.addEventListener("click", () => {
     }
 
     // récupère le panier dans le localstorage
-    else panier.push(product);
+    else basket.push(product);
     // permet de rajouter les valeurs sélectionnées dans le localst
-    localStorage.setItem("panier", JSON.stringify(panier));
+    localStorage.setItem("basket", JSON.stringify(basket));
   } else {
     alert("Veuillez sélectionnez une couleur et une quantité valide");
   }
