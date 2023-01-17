@@ -11,14 +11,14 @@ const addr = fetch("http://127.0.0.1:3000/api/products")
     } else {
       // afficher les produits dans le HTML
       let structurebasket = ``;
-
+      // boucle pour récupérer les éléments manquant dans l'API
       for (i = 0; i < basket.length; i++) {
         const productFound = data.find(
           (product) => product._id === basket[i].id
         );
 
         structurebasket += `
-        <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
+        <article class="cart__item" data-id="${productFound._id}" data-color="${basket[i].color}">
     <div class="cart__item__img">
       <img src="${productFound.imageUrl}" alt="${productFound.altTxt}">
     </div>
@@ -48,42 +48,78 @@ const addr = fetch("http://127.0.0.1:3000/api/products")
     }
 
     ////////////////////////////////////// total du prix et du nombre d'article////////////////////////////////////////
+    const nbEntier = parseInt("quantity");
+    async function setTotalPriceQuantity() {
+      // déclaration de la variable qui va contenir les prix presents dans le panier
+      let totalPrice = 0;
+      let totalQuantity = 0;
 
-    // déclaration de la variable qui va contenir les prix presents dans le panier
-    // let totalPriceBasket = [];
+      // aller chercher les prix dans le panier
+      for (let product of basket) {
+        totalQuantity += product.nbEntier;
+      }
+      document.querySelector("#totalQuantity").textContent = totalQuantity;
 
-    // // aller chercher les prix dans le panier
+      for (let product of basket) {
+        let productPrice = await fetch(
+          "http://127.0.0.1:3000/api/products/" + product.id
+        )
+          .then((rep) => rep.json())
+          .then((productData) => {
+            return productData.price;
+          });
+        totalPrice += productPrice * product.nbEntier;
+      }
+      document.querySelector("#totalPrice").textContent = totalPrice;
 
-    // for (let n = 0; n > basket.length; n++) {
-    //   console.log(basket[n].price);
-    // }
+      console.log(typeof totalQuantity);
+      console.log(product.price);
+    }
 
-    //  modifier la quantité et l'enregistrer dans le localstorage
+    setTotalPriceQuantity();
 
     ///////////////////////// supprimer un article////////////////////////////
-    let baskets = basket;
+
     let deleteItems = document.querySelectorAll(".deleteItem");
 
-    console.log(deleteItems);
-
     for (let k = 0; k < deleteItems.length; k++) {
+      // j'écoute au click l'evenement supprimer
       deleteItems[k].addEventListener("click", (event) => {
-        event.preventDefault();
-        console.log(event);
+        // je recherche le parent le plus proche
+        let closest = deleteItems[k].closest(".cart__item");
 
-        //  sélectionner l'id du produit
-        let product = basket[k].id && basket[k].color;
-        console.log("article supprimé");
-        console.log(product);
+        // récupérer la couleur dans mon panier
+        let closestColor = closest.getAttribute("data-color");
+        console.log(closestColor);
 
         // suppression du produit sélectionner
+        let closestId = closest.getAttribute("data-id");
+        console.log(closestId);
+        closest.remove();
 
-        baskets = baskets.filter((el) => el.product !== product);
-        console.log(baskets);
-
-        //ajouter les valeurs sélectionnées dans le localst
+        //changer les nouvelles valeurs  dans le localst
         localStorage.setItem("basket", JSON.stringify(basket));
       });
     }
-    // Faire le totale des articles
+
+    ////////////////////////////////changement quantité dans panier/////////////////////////////////////////////////////
+    //  sélection de la balise HTML
+    let changeItems = document.querySelectorAll(".itemQuantity");
+    //  boucle
+    for (let input of changeItems) {
+      input.addEventListener("change", () => {
+        let closest = input.closest(".cart__item");
+        let closestColor = closest.getAttribute("data-color");
+        let closestId = closest.getAttribute("data-id");
+        for (let product of basket) {
+          if (product.color === closestColor && product.id === closestId) {
+            product.quantity = input.value;
+            break;
+          }
+          console.log(closest);
+        }
+
+        localStorage.setItem("basket", JSON.stringify(basket));
+      });
+    }
   });
