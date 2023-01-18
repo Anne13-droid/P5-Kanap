@@ -1,4 +1,5 @@
 // récupération du panier et parcourir l'array
+
 const basket = JSON.parse(window.localStorage.getItem("basket"));
 
 // récupération de l'API pour les éléments manquants
@@ -48,15 +49,15 @@ const addr = fetch("http://127.0.0.1:3000/api/products")
     }
 
     ////////////////////////////////////// total du prix et du nombre d'article////////////////////////////////////////
-    const nbEntier = parseInt("quantity");
+
     async function setTotalPriceQuantity() {
       // déclaration de la variable qui va contenir les prix presents dans le panier
       let totalPrice = 0;
       let totalQuantity = 0;
 
-      // aller chercher les prix dans le panier
+      //  aller chercher les prix dans le panier
       for (let product of basket) {
-        totalQuantity += product.nbEntier;
+        totalQuantity += parseInt(product.quantity);
       }
       document.querySelector("#totalQuantity").textContent = totalQuantity;
 
@@ -68,12 +69,9 @@ const addr = fetch("http://127.0.0.1:3000/api/products")
           .then((productData) => {
             return productData.price;
           });
-        totalPrice += productPrice * product.nbEntier;
+        totalPrice += productPrice * product.quantity;
       }
       document.querySelector("#totalPrice").textContent = totalPrice;
-
-      console.log(typeof totalQuantity);
-      console.log(product.price);
     }
 
     setTotalPriceQuantity();
@@ -90,22 +88,30 @@ const addr = fetch("http://127.0.0.1:3000/api/products")
 
         // récupérer la couleur dans mon panier
         let closestColor = closest.getAttribute("data-color");
-        console.log(closestColor);
 
         // suppression du produit sélectionner
         let closestId = closest.getAttribute("data-id");
-        console.log(closestId);
+
+        // boucle avec la méthode splice pour retirer les éléments ciblés du tableau
+        for (let product of basket) {
+          if (product.color === closestColor && product.id === closestId) {
+            basket.splice(basket.indexOf(product), 1);
+          }
+        }
         closest.remove();
 
         //changer les nouvelles valeurs  dans le localst
         localStorage.setItem("basket", JSON.stringify(basket));
+
+        setTotalPriceQuantity();
       });
     }
 
     ////////////////////////////////changement quantité dans panier/////////////////////////////////////////////////////
+
     //  sélection de la balise HTML
     let changeItems = document.querySelectorAll(".itemQuantity");
-    //  boucle
+    //  boucle sur l'input avec un eventListener change
     for (let input of changeItems) {
       input.addEventListener("change", () => {
         let closest = input.closest(".cart__item");
@@ -114,12 +120,14 @@ const addr = fetch("http://127.0.0.1:3000/api/products")
         for (let product of basket) {
           if (product.color === closestColor && product.id === closestId) {
             product.quantity = input.value;
-            break;
           }
-          console.log(closest);
         }
 
         localStorage.setItem("basket", JSON.stringify(basket));
+        // je rappelle ma fonction pour que le chagement s'opère
+        setTotalPriceQuantity();
       });
     }
+
+    //////////////////////////////////////////FORMULAIRE////////////////////////////////////////////////////////
   });
