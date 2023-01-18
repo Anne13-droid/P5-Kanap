@@ -130,4 +130,21 @@ const addr = fetch("http://127.0.0.1:3000/api/products")
     }
 
     //////////////////////////////////////////FORMULAIRE////////////////////////////////////////////////////////
+    const firstName = document.querySelector("#firstName");
+    const lastName = document.querySelector("#lastName");
+    const adress = document.querySelector("#adress");
+    const city = document.querySelector("#city");
+    const email = document.querySelector("#email");
+
+    let coordonnees = {
+      prenom: firstName,
+      nom: lastName,
+      adresse: adress,
+      ville: city,
+      email: email,
+    };
+    function profil() {
+      for (let form of coordonnees) {
+      }
+    }
   });
