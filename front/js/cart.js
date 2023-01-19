@@ -128,23 +128,51 @@ const addr = fetch("http://127.0.0.1:3000/api/products")
         setTotalPriceQuantity();
       });
     }
-
-    //////////////////////////////////////////FORMULAIRE////////////////////////////////////////////////////////
-    const firstName = document.querySelector("#firstName");
-    const lastName = document.querySelector("#lastName");
-    const adress = document.querySelector("#adress");
-    const city = document.querySelector("#city");
-    const email = document.querySelector("#email");
-
-    let coordonnees = {
-      prenom: firstName,
-      nom: lastName,
-      adresse: adress,
-      ville: city,
-      email: email,
-    };
-    function profil() {
-      for (let form of coordonnees) {
-      }
-    }
   });
+//////////////////////////////////////////FORMULAIRE////////////////////////////////////////////////////////
+
+// creation d'un objet contact
+let contact = {
+  prenom: firstName.value,
+  nom: lastName.value,
+  addresse: address.value,
+  ville: city.value,
+  email: email.value,
+};
+console.log(contact);
+
+//  création d'un tableau product vide
+let products = [];
+console.log(products);
+
+// appel du btn commander
+const order = document.querySelector("#order");
+
+// ecouter l'évenement  du btn commander
+order.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  //ajout de l'objet contact et des identifiant des produits  au tableau
+  for (let product of products) {
+    product = push(products._id);
+
+    // transformation de l'objet en format json
+    let command = JSON.stringify({ product, contact });
+
+    async function send() {
+      //  appel de l'API avec fetch et envoie avec la methode post
+      let response = fetch("http://127.0.0.1:3000/api/products/order"._id, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+
+        body: command,
+      });
+      // réponse du serveur
+      let result = await response.json;
+      alert(result.message);
+    }
+  }
+  send();
+});
+
+console.log(order);
