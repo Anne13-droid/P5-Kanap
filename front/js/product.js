@@ -48,24 +48,20 @@ addToCart.addEventListener("click", () => {
   const id = addr._id;
 
   // condition des valeurs au click à la selection du client
-  if (
-    color !== "default" &&
-    parseInt(quantity) >= 1 &&
-    parseInt(quantity) <= 100
-  ) {
+  if (color !== "default" && quantity >= 1 && quantity <= 100) {
     let basket = JSON.parse(localStorage.getItem("basket")) || [];
     // récupérer les propriétés de l'article en objet
     let product = {
       id: addr,
       color: color,
-      quantity: parseInt(quantity.value),
+      quantity: parseInt(quantity),
     };
     // rajouter un article mm id mm couleur dans le localstorage sur une meme ligne
     let cartFound = basket.find(
       (p) => p.id == product.id && p.color == product.color
     );
     if (cartFound != undefined) {
-      cartFound.quantity++;
+      cartFound.quantity += parseInt(quantity);
     }
     // récupère le panier dans le localstorage
     else basket.push(product);
@@ -75,5 +71,3 @@ addToCart.addEventListener("click", () => {
     alert("Veuillez sélectionnez une couleur et une quantité valide");
   }
 });
-
-console.log(typeof quantity);
