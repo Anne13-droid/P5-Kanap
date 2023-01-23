@@ -126,9 +126,10 @@ if (basket === null) {
 
 // appel du btn commander
 const order = document.querySelector("#order");
+const form = document.querySelector(".cart__order__form");
 
 // ecouter l'évenement  du btn commander
-order.addEventListener("submit", (event) => {
+form.addEventListener("submit", (event) => {
   event.preventDefault();
   // contact: {
   //  *   firstName: string,
@@ -149,7 +150,10 @@ order.addEventListener("submit", (event) => {
   //  * products: ['hjkhjkhjkhjkhjk', 'jkljkljkljkljkl'] <-- array of product _id */
   //  création d'un tableau product
   let products = [];
-
+  // basket.forEach((product) => {
+  //   fetch("http://127.0.0.1:3000/api/products/" + product.id)
+  //     .then((rep) => rep.json())
+  //     .then((data) => {
   //ajout de l'objet contact et des identifiant des produits  au tableau
   for (let product of products) {
     product = push(products._id);
@@ -158,7 +162,7 @@ order.addEventListener("submit", (event) => {
     // dans l'objet : contact, products
     // transformation de l'objet en format json
     let command = JSON.stringify({ products, contact });
-
+    console.log(command);
     async function send() {
       //  appel de l'API avec fetch et envoie avec la methode post
       let response = await fetch("http://127.0.0.1:3000/api/products/order", {
@@ -166,62 +170,116 @@ order.addEventListener("submit", (event) => {
         headers: { "Content-Type": "application/json" },
         body: command,
       });
+
       // réponse du serveur
-      const result = response.json;
+      const result = await response.json();
       console.log(result);
     }
     send();
   }
-
-  function validationEmail() {
-    let email =
-      /^(([^<()[\]\\.,;:\s@\]+(\.[^<()[\]\\.,;:\s@\]+)*)|(.+))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
-    document.querySelector("#email").innerHTML = regex;
-    if (email.test(document.querySelector("#email").value)) {
-      document.querySelector("#email").innerHTML = "L'addresse mail est valide";
-    } else {
-      document.querySelector("#email").innerHTML =
-        "L'addresse mail n'est pas valide";
-    }
-    let firstName = /[a-zA-Z_-]/g;
-    if (firstName.test(document.querySelector("#firstName").value)) {
-      document.querySelector("#firstName").innerHTML = "Prénom valide";
-    } else {
-      document.querySelector("#firstName").innerHTML = "Prénom invalide";
-    }
-    let lastName = /[A-Z-]/g;
-    if (lastName.test(document.querySelector("#lastName").value)) {
-      document.querySelector("#lastName").innerHTML = "Nom valide";
-    } else {
-      document.querySelector("#lastName").innerHTML = "Nom invalide";
-    }
-    let adress = /\w[,]/g;
-    if (adress.test(document.querySelector("#adress").value)) {
-      document.querySelector("#adress").innerHTML = "Adresse valide";
-    } else {
-      document.querySelector("#adress").innerHTML = "Adresse invalide";
-    }
-    let city = /[A-Z-]/g;
-    if (city.test(document.querySelector("#city").value)) {
-      document.querySelector("#city").innerHTML = "Ville valide";
-    } else {
-      document.querySelector("#city").innerHTML = "Ville invalide";
-    }
-  }
-  validationEmail();
-  console.log(validationEmail());
-  function create_UUID() {
-    let dt = new Date().getTime();
-    let uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-      /[xy]/g,
-      function (c) {
-        let r = (dt + Math.random() * 16) % 16 | 0;
-        dt = Math.floor(dt / 16);
-        return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
-      }
-    );
-    return uuid;
-  }
-
-  console.log(create_UUID());
 });
+
+const champs = document.querySelector(".cart__order__form__question");
+
+// écouter la modification des champs
+champs.addEventListener("change", () => {
+  let prenom = document.querySelector("#firstName").value;
+  let nom = document.querySelector("#lastName").value;
+  let adresse = document.querySelector("#address").value;
+  let ville = document.querySelector("#city").value;
+  let mail = document.querySelector("#email").value;
+
+  // creation de la reg exp pour valider les champs
+  let email = /^[a-z0-9_.-]+[@]{1}[a-z_.-]+.{1}[a-z]{2,4}$/g;
+  let firstName = /[a-zA-Z_-]/g;
+  let lastName = /[a-zA-Z-]/g;
+  let address = /\w[,-]/g;
+  let city = /[a-zA-Z-]/g;
+
+  // test de l'expression régulière
+  let testEmail = email.test(mail);
+  let messError = document.querySelector("#emailErrorMsg");
+  if (testEmail) {
+    messError.innerHTML = "Email Valide";
+  } else {
+    messError.innerHTML = "Email non valide";
+  }
+
+  let testFirstName = firstName.test(prenom);
+  let messError1 = document.querySelector("#firstNameErrorMsg");
+  if (testFirstName) {
+    messError1.innerHTML = "Prénom Valide";
+  } else {
+    messError1.innerHTML = "Prénom non valide";
+  }
+
+  let testLastName = lastName.test(nom);
+  let messError2 = document.querySelector("#lastNameErrorMsg");
+  if (testLastName) {
+    messError2.innerHTML = "Nom Valide";
+  } else {
+    messError2.innerHTML = "Nom non valide";
+  }
+
+  let testAddress = address.test(adresse);
+  let messError3 = document.querySelector("#addressErrorMsg");
+  if (testAddress) {
+    messError3.innerHTML = "Adresse Valide";
+  } else {
+    messError3.innerHTML = "Adresse non valide";
+  }
+
+  let testCity = city.test(ville);
+  let messError4 = document.querySelector("#cityErrorMsg");
+  if (testCity) {
+    messError4.innerHTML = "Ville Valide";
+  } else {
+    messError4.innerHTML = "Ville non valide";
+  }
+
+  console.log(testAddress);
+});
+
+//
+//
+// if (firstName.test(document.querySelector("#firstName").value)) {
+//   document.querySelector("#firstName").innerHTML = "champ valide";
+// } else {
+//   document.querySelector("#firstName").innerHTML = "champ invalide";
+// }
+//
+// ;
+// if (lastName.test(document.querySelector("#lastName").value)) {
+//   document.querySelector("#lastName").innerHTML = "champ valide";
+// } else {
+//   document.querySelector("#lastName").innerHTML = "champ invalide";
+// }
+//
+//
+// if (adress.test(document.querySelector("#address").value)) {
+//   document.querySelector("#address").innerHTML = "champ valide";
+// } else {
+//   document.querySelector("#address").innerHTML = "champ invalide";
+// }
+//
+//
+// if (city.test(document.querySelector("#city").value)) {
+//   document.querySelector("#city").innerHTML = "champ valide";
+// } else {
+//   document.querySelector("#city").innerHTML = "champ invalide";
+// }
+
+// function create_UUID() {
+//   let dt = new Date().getTime();
+//   let uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+//     /[xy]/g,
+//     function (c) {
+//       let r = (dt + Math.random() * 16) % 16 | 0;
+//       dt = Math.floor(dt / 16);
+//       return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
+//     }
+//   );
+//   return uuid;
+// }
+
+// console.log(create_UUID());
