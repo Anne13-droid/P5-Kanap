@@ -123,163 +123,113 @@ if (basket === null) {
   });
 }
 //////////////////////////////////////////FORMULAIRE////////////////////////////////////////////////////////
-
-// appel du btn commander
+// appel du btn commander et ajout des variables
 const order = document.querySelector("#order");
 const form = document.querySelector(".cart__order__form");
+const champs = document.querySelector(".cart__order__form__question");
+
+// variables pour le reg exp
+let prenom = document.querySelector("#firstName").value;
+let nom = document.querySelector("#lastName").value;
+let adresse = document.querySelector("#address").value;
+let ville = document.querySelector("#city").value;
+let mail = document.querySelector("#email").value;
+
+// création de l'objet contact
+let contact = {
+  firstName: document.querySelector("#firstName").value,
+  lastName: document.querySelector("#lastName").value,
+  address: document.querySelector("#address").value,
+  city: document.querySelector("#city").value,
+  email: document.querySelector("#email").value,
+};
+
+// creation de la reg exp pour valider les champs
+let firstName = /^[a-zA-Z\-]+$/g;
+let lastName = /^[a-zA-Z\-]+$/g;
+let address = /^[a-zA-Z0-9\s,'-]*$/g;
+let city = /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/g;
+let email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+
+//-----------------Je récupère mes produits id------------//
+
+basket.forEach((product) => {
+  //  création d'un tableau product
+  let products = [];
+
+  // transformation de l'objet en format json
+  let command = JSON.stringify({ products, contact });
+
+  //ajout de l'objet contact et des identifiant des produits  au tableau
+  for (let product of products) {
+    product = push(products._id);
+  }
+  console.log(command);
+  console.log(product);
+
+  async function send(order) {
+    //  appel de l'API avec fetch et envoie avec la methode post
+    let response = await fetch("http://127.0.0.1:3000/api/products/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: command,
+    });
+    if (response.ok) {
+      // réponse du serveur
+      const result = await response.json(order);
+      localStorage.removeItem(basket);
+      window.location.href = `http://127.0.0.1:5500/front/html/confirmation.html?orderId=${result.orderId}`;
+
+      console.log(result);
+    }
+    console.log(response);
+  }
+
+  send();
+});
 
 // ecouter l'évenement  du btn commander
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-  // contact: {
-  //  *   firstName: string,
-  //  *   lastName: string,
-  //  *   address: string,
-  //  *   city: string,
-  //  *   email: string
-  //  * },
-  // creation d'un objet contact
-  let contact = {
-    prenom: event.target.querySelector("#firstName").value,
-    nom: event.target.querySelector("#lastName").value,
-    addresse: event.target.querySelector("#address").value,
-    ville: event.target.querySelector("#city").value,
-    email: event.target.querySelector("#email").value,
-  };
-  console.log(contact);
-  //  * products: ['hjkhjkhjkhjkhjk', 'jkljkljkljkljkl'] <-- array of product _id */
-  //  création d'un tableau product
-  let products = [];
-  // basket.forEach((product) => {
-  //   fetch("http://127.0.0.1:3000/api/products/" + product.id)
-  //     .then((rep) => rep.json())
-  //     .then((data) => {
-  //ajout de l'objet contact et des identifiant des produits  au tableau
-  for (let product of products) {
-    product = push(products._id);
-
-    // créer une commande  (objet)
-    // dans l'objet : contact, products
-    // transformation de l'objet en format json
-    let command = JSON.stringify({ products, contact });
-    console.log(command);
-    async function send() {
-      //  appel de l'API avec fetch et envoie avec la methode post
-      let response = await fetch("http://127.0.0.1:3000/api/products/order", {
-        method: POST,
-        headers: { "Content-Type": "application/json" },
-        body: command,
-      });
-
-      // réponse du serveur
-      const result = await response.json();
-      console.log(result);
-    }
-    send();
-  }
-});
-
-const champs = document.querySelector(".cart__order__form__question");
-
-// écouter la modification des champs
-champs.addEventListener("change", () => {
-  let prenom = document.querySelector("#firstName").value;
-  let nom = document.querySelector("#lastName").value;
-  let adresse = document.querySelector("#address").value;
-  let ville = document.querySelector("#city").value;
-  let mail = document.querySelector("#email").value;
-
-  // creation de la reg exp pour valider les champs
-  let email = /^[a-z0-9_.-]+[@]{1}[a-z_.-]+.{1}[a-z]{2,4}$/g;
-  let firstName = /[a-zA-Z_-]/g;
-  let lastName = /[a-zA-Z-]/g;
-  let address = /\w[,-]/g;
-  let city = /[a-zA-Z-]/g;
-
   // test de l'expression régulière
-  let testEmail = email.test(mail);
-  let messError = document.querySelector("#emailErrorMsg");
-  if (testEmail) {
-    messError.innerHTML = "Email Valide";
-  } else {
-    messError.innerHTML = "Email non valide";
+  if (!form || form === "") {
+    alert = "Veuillez remplir tous les champs du formulaire";
+  } else if (prenom && nom && adresse && ville && mail) {
+    let testFirstName = firstName.test(prenom);
+    let messError1 = document.querySelector("#firstNameErrorMsg");
+    if (!firstName || (firstName === "" && !testFirstName)) {
+      messError1.textContent = "Veuillez renseigner un prénom valide";
+    } else {
+      messError1.textContent = "Prénom valide";
+    }
+    let testLastName = lastName.test(nom);
+    let messError2 = document.querySelector("#lastNameErrorMsg");
+    if (!lastName || (lastName === "" && !testLastName)) {
+      messError2.textContent = "Veuillez renseigner un nom valide";
+    } else {
+      messError2.textContent = "Nom valide";
+    }
+    let testAddress = address.test(adresse);
+    let messError3 = document.querySelector("#addressErrorMsg");
+    if (!address || (address === "" && !testAddress)) {
+      messError3.textContent = "Veuillez renseigner une adresse valide";
+    } else {
+      messError3.textContent = "Adresse valide";
+    }
+    let testCity = city.test(ville);
+    let messError4 = document.querySelector("#cityErrorMsg");
+    if (!city || (city === "" && !testCity)) {
+      messError4.textContent = "Veuillez renseigner une ville valide";
+    } else {
+      messError4.textContent = "Ville valide";
+    }
+    let testEmail = email.test(mail);
+    let messError = document.querySelector("#emailErrorMsg");
+    if (!email || (email === "" && !testEmail)) {
+      messError.textContent = "Veuillez renseigner un email valide";
+    } else {
+      messError.textContent = "Email valide";
+    }
+    console.log(testEmail);
   }
-
-  let testFirstName = firstName.test(prenom);
-  let messError1 = document.querySelector("#firstNameErrorMsg");
-  if (testFirstName) {
-    messError1.innerHTML = "Prénom Valide";
-  } else {
-    messError1.innerHTML = "Prénom non valide";
-  }
-
-  let testLastName = lastName.test(nom);
-  let messError2 = document.querySelector("#lastNameErrorMsg");
-  if (testLastName) {
-    messError2.innerHTML = "Nom Valide";
-  } else {
-    messError2.innerHTML = "Nom non valide";
-  }
-
-  let testAddress = address.test(adresse);
-  let messError3 = document.querySelector("#addressErrorMsg");
-  if (testAddress) {
-    messError3.innerHTML = "Adresse Valide";
-  } else {
-    messError3.innerHTML = "Adresse non valide";
-  }
-
-  let testCity = city.test(ville);
-  let messError4 = document.querySelector("#cityErrorMsg");
-  if (testCity) {
-    messError4.innerHTML = "Ville Valide";
-  } else {
-    messError4.innerHTML = "Ville non valide";
-  }
-
-  console.log(testAddress);
 });
-
-//
-//
-// if (firstName.test(document.querySelector("#firstName").value)) {
-//   document.querySelector("#firstName").innerHTML = "champ valide";
-// } else {
-//   document.querySelector("#firstName").innerHTML = "champ invalide";
-// }
-//
-// ;
-// if (lastName.test(document.querySelector("#lastName").value)) {
-//   document.querySelector("#lastName").innerHTML = "champ valide";
-// } else {
-//   document.querySelector("#lastName").innerHTML = "champ invalide";
-// }
-//
-//
-// if (adress.test(document.querySelector("#address").value)) {
-//   document.querySelector("#address").innerHTML = "champ valide";
-// } else {
-//   document.querySelector("#address").innerHTML = "champ invalide";
-// }
-//
-//
-// if (city.test(document.querySelector("#city").value)) {
-//   document.querySelector("#city").innerHTML = "champ valide";
-// } else {
-//   document.querySelector("#city").innerHTML = "champ invalide";
-// }
-
-// function create_UUID() {
-//   let dt = new Date().getTime();
-//   let uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-//     /[xy]/g,
-//     function (c) {
-//       let r = (dt + Math.random() * 16) % 16 | 0;
-//       dt = Math.floor(dt / 16);
-//       return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
-//     }
-//   );
-//   return uuid;
-// }
-
-// console.log(create_UUID());
