@@ -1,16 +1,14 @@
-// récupération de l'url avec window.location.href qui permet de récupérer l'url de la page courante
+// Récupération de l'id de la commande (provenant du serveur)
+const responsId = localStorage.getItem("responsId");
 
-const newLocal = new URL(window.location.href);
+console.log(`responsId:${responsId}`);
 
-//création d'une variable id pour récupérer les articles
+// Structure HTML de la page confirmation
+const confirm = (document.querySelector("#orderId").textContent = responsId);
 
-const addr = newLocal.searchParams.get(`orderid`);
+function moveLocalStorage(key) {
+  localStorage.removeItem(key);
+}
 
-// const command = JSON.stringify("command");
-const command = JSON.parse(localStorage.getItem("command"));
-try {
-  let response = fetch("http://127.0.0.1:3000/api/products/order" + addr)
-    .then((rep) => rep.json())
-    .then((data) => {});
-} catch {}
-console.log(newLocal);
+moveLocalStorage("responsId");
+moveLocalStorage("basket");
