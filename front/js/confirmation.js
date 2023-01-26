@@ -1,14 +1,14 @@
-// Récupération de l'id de la commande (provenant du serveur)
-const responsId = localStorage.getItem("responsId");
+// Récupération de l'id de la commande grace au serveur pour l'afficher dans le HTML
 
-console.log(`responsId:${responsId}`);
+const newLocal = new URL(window.location.href);
+const orderId = newLocal.searchParams.get(`orderId`);
 
 // Structure HTML de la page confirmation
-const confirm = (document.querySelector("#orderId").textContent = responsId);
+const confirm = (document.querySelector("#orderId").textContent = orderId);
 
+// Je supprime le panier du localstorage
 function moveLocalStorage(key) {
-  localStorage.removeItem(key);
+    localStorage.removeItem(key);
 }
 
-moveLocalStorage("responsId");
 moveLocalStorage("basket");
