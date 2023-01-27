@@ -1,4 +1,4 @@
-// j'essaie(try) de récupérer tous les produit de l'API avec la méthode fetch pour les insérer dans le HTML après l'avoir créé
+// j'essaie(try) de récupérer tous les produit de l'API avec la méthode fetch pour les insérer dans le DOM
 
 try {
     const addr = fetch("http://127.0.0.1:3000/api/products")

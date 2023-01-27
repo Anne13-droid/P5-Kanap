@@ -5,7 +5,7 @@ const addr = newLocal.searchParams.get(`id`);
 
 // Cette fonction va me permettre de récupérer le produit sélectionner dans la page d'accueil (fetch),
 //  d'y insérer l'image, le nom, la description, le prix, les couleurs et quantités du produit en question
-//  après avoir créer la partie HTML(querySelector)
+//  après avoir créer la partie HTML du DOM
 try {
     fetch("http://127.0.0.1:3000/api/products/" + addr)
         .then((rep) => rep.json())

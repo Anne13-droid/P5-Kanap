@@ -7,12 +7,12 @@ if (basket === null || basket.length == 0) {
     window.location.href = `http://127.0.0.1:5500/front/html/index.html`;
 } else {
     // Je fais une boucle pour chaque produit qui se trouvent dans le panier
-    // et je récupère les info qui manque dans l'API avec fetch (prix, image) pour les insérer dans le HTML
+    // et je récupère les info qui manque dans l'API avec fetch (prix, image) pour les insérer dans le DOM
     basket.forEach((product) => {
         fetch("http://127.0.0.1:3000/api/products/" + product.id)
             .then((rep) => rep.json())
             .then((data) => {
-                // j'indique tout ce que je dois afficher dans le HTML
+                // j'indique tout ce que je dois afficher sur ma page
                 let structurebasket = ``;
 
                 structurebasket += `
@@ -52,7 +52,7 @@ if (basket === null || basket.length == 0) {
                     let totalQuantity = 0;
 
                     //  je fais une boucle pour aller chercher les prix et les quantités dans le panier en appelant l'API avec fetch
-                    //  pour faire les totaux et les afficher dans le HTML
+                    //  pour faire les totaux et les afficher dans le DOM
                     for (let product of basket) {
                         let productPrice = await fetch(
                             "http://127.0.0.1:3000/api/products/" + product.id
