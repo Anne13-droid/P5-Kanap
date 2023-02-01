@@ -150,8 +150,7 @@ form.addEventListener("submit", (event) => {
 
     let firstName = /^[A-Z][A-Za-z\é\è\ê\ï\ë\-]+$/;
     let lastName = /^[A-Z][A-Za-z\é\è\ê\ï\ë\-]+$/;
-    let address =
-        /^[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ\s,'-]*$/;
+    let address = /^[a-zA-Z0-9àèìòùÀÈÌÒÙÁÉÍÓÚÝâêîôûÂÊÎÔÛëïçÇ\s,'-]*$/;
     let city = /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/;
     let email = /^[A-z0-9._-]+[@]{1}[a-zA-Z0-9._-]+[.]{1}[a-zA-Z]{2,10}$/;
 
