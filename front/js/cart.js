@@ -110,21 +110,33 @@ if (basket === null || basket.length == 0) {
                 // en recherchant le parent le plus proche afin de sélectionner les couleur et id
                 for (let input of changeItems) {
                     input.addEventListener("change", () => {
-                        let closest = input.closest(".cart__item");
-                        let closestColor = closest.getAttribute("data-color");
-                        let closestId = closest.getAttribute("data-id");
-                        for (let product of basket) {
-                            if (
-                                product.color === closestColor &&
-                                product.id === closestId
-                            ) {
-                                product.quantity = parseInt(input.value);
-                            }
-                        }
-                        // je change les nouvelles valeurs dans le local storage
-                        localStorage.setItem("basket", JSON.stringify(basket));
+                        if (input.value >= 1 && input.value <= 100) {
+                            let closest = input.closest(".cart__item");
+                            let closestColor =
+                                closest.getAttribute("data-color");
+                            let closestId = closest.getAttribute("data-id");
 
-                        setTotalPriceQuantity();
+                            for (let product of basket) {
+                                if (
+                                    product.color === closestColor &&
+                                    product.id === closestId
+                                ) {
+                                    product.quantity = parseInt(input.value);
+                                }
+                            }
+
+                            // je change les nouvelles valeurs dans le local storage
+                            localStorage.setItem(
+                                "basket",
+                                JSON.stringify(basket)
+                            );
+
+                            setTotalPriceQuantity();
+                        } else {
+                            window.alert(
+                                "Veuillez saisir une quantité valide entre 1 et 100"
+                            );
+                        }
                     });
                 }
             });
@@ -226,6 +238,13 @@ form.addEventListener("submit", (event) => {
             if (response.ok) {
                 // réponse du serveur
                 const result = await response.json();
+
+                // Je supprime le panier du localstorage
+                function moveLocalStorage(key) {
+                    localStorage.removeItem(key);
+                }
+
+                moveLocalStorage("basket");
 
                 // envoie des informations dans la page confirmation
                 window.location.href = `http://127.0.0.1:5500/front/html/confirmation.html?orderId=${result.orderId}`;

@@ -5,10 +5,3 @@ const orderId = newLocal.searchParams.get(`orderId`);
 
 // Structure HTML de la page confirmation
 const confirm = (document.querySelector("#orderId").textContent = orderId);
-
-// Je supprime le panier du localstorage
-function moveLocalStorage(key) {
-    localStorage.removeItem(key);
-}
-
-moveLocalStorage("basket");
